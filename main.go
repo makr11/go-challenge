@@ -20,39 +20,63 @@ type MathResponse struct {
 
 type operation func(x int, y int) (int, error)
 
+func add_op(x int, y int) (int, error) {
+	answer := x + y
+	return answer, nil
+}
+
 func add(w http.ResponseWriter, req *http.Request) {
-	op := func(x int, y int) (int, error) {
-		answer := x + y
-		return answer, nil
+	switch req.Method {
+	case "GET":
+		simple_math(w, req, add_op)
+	default:
+		http.Error(w, "", http.StatusMethodNotAllowed)
 	}
-	simple_math(w, req, op)
+}
+
+func subtract_op(x int, y int) (int, error) {
+	answer := x - y
+	return answer, nil
 }
 
 func subtract(w http.ResponseWriter, req *http.Request) {
-	op := func(x int, y int) (int, error) {
-		answer := x - y
-		return answer, nil
+	switch req.Method {
+	case "GET":
+		simple_math(w, req, subtract_op)
+	default:
+		http.Error(w, "", http.StatusMethodNotAllowed)
 	}
-	simple_math(w, req, op)
+}
+
+func multiply_op(x int, y int) (int, error) {
+	answer := x * y
+	return answer, nil
 }
 
 func multiply(w http.ResponseWriter, req *http.Request) {
-	op := func(x int, y int) (int, error) {
-		answer := x * y
-		return answer, nil
+	switch req.Method {
+	case "GET":
+		simple_math(w, req, multiply_op)
+	default:
+		http.Error(w, "", http.StatusMethodNotAllowed)
 	}
-	simple_math(w, req, op)
+}
+
+func divide_op(x int, y int) (int, error) {
+	if y == 0 {
+		return 0, errors.New("Can not divide with '0'")
+	}
+	answer := x / y
+	return answer, nil
 }
 
 func divide(w http.ResponseWriter, req *http.Request) {
-	op := func(x int, y int) (int, error) {
-		if y == 0 {
-			return 0, errors.New("Can not divide with '0'")
-		}
-		answer := x / y
-		return answer, nil
+	switch req.Method {
+	case "GET":
+		simple_math(w, req, divide_op)
+	default:
+		http.Error(w, "", http.StatusMethodNotAllowed)
 	}
-	simple_math(w, req, op)
 }
 
 func parse_operands(xs string, ys string) (xi int, yi int, err error) {
