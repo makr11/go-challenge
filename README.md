@@ -18,6 +18,7 @@ Math operations supported:
 ## How to install and run
 
 Run the web server by executing this command in the terminal:
+For importing local packages it was required that I place the project inside the go/src/{project}.
 
 ```
 $ go run main.go
